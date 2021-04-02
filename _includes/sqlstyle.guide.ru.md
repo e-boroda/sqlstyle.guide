@@ -1,7 +1,5 @@
 # SQL: Руководство по стилю для разработчиков моделей данных
 
-TODO 1. выравнивание, 2. знак ==
-
 
 ## Предисловие
 
@@ -40,16 +38,16 @@ TODO 1. выравнивание, 2. знак ==
 
 ```sql
 SELECT file_hash -- stored ssdeep hash
-  FROM file_system
- WHERE file_name = '.vimrc';
+    FROM file_system
+    WHERE file_name == '.vimrc';
 ```
 
 ```sql
 /* Updating the file record after writing to the file */
 UPDATE file_system
-   SET file_modified_date = '1980-02-22 13:19:01.00000',
-       file_size = 209732
- WHERE file_name = '.vimrc';
+    SET file_modified_date = '1980-02-22 13:19:01.00000',
+        file_size = 209732
+    WHERE file_name == '.vimrc';
 ```
 
 ### Плохой стиль
@@ -90,7 +88,7 @@ UPDATE file_system
 
 ```sql
 SELECT first_name
-  FROM staff;
+    FROM staff;
 ```
 
 ### Таблицы
@@ -127,14 +125,14 @@ SELECT first_name
 
 ```sql
 SELECT first_name AS fn
-  FROM staff AS s1
-  JOIN students AS s2
-    ON s2.mentor_id = s1.staff_num;
+    FROM staff AS s1
+        JOIN students AS s2
+            ON s2.mentor_id == s1.staff_num;
 ```
 
 ```sql
 SELECT SUM(s.monitor_tally) AS monitor_total
-  FROM staff AS s;
+    FROM staff AS s;
 ```
 
 ### Хранимые процедуры
@@ -172,8 +170,8 @@ SELECT SUM(s.monitor_tally) AS monitor_total
 
 ```sql
 SELECT model_num
-  FROM phones AS p
- WHERE p.release_date > '2014-09-30';
+    FROM phones AS p
+    WHERE p.release_date > '2014-09-30';
 ```
 
 ### Пробельные символы
@@ -181,39 +179,11 @@ SELECT model_num
 Для лучшей удобочитаемости кода важно правильно использовать пробельные символы.
 Не нужно нагромождать код или удалять пробелы, присущие естественному языку.
 
-#### Пробелы (TODO!)
+#### Пробелы
 
-Можно и нужно использовать пробелы для выравнивания основных ключевых слов по
-их правому краю. В типографике получающиеся таким образом
-«[коридоры][rivers-ru]» стараются избегать, в то же время в нашем случае они,
-напротив, помогают лучше вычленять важные ключевые слова.
+Старайтесь расставлять пробелы:
 
-```sql
-(SELECT f.species_name,
-        AVG(f.height) AS average_height, AVG(f.diameter) AS average_diameter
-   FROM flora AS f
-  WHERE f.species_name = 'Banksia'
-     OR f.species_name = 'Sheoak'
-     OR f.species_name = 'Wattle'
-  GROUP BY f.species_name, f.observation_date)
-
-  UNION ALL
-
-(SELECT b.species_name,
-        AVG(b.height) AS average_height, AVG(b.diameter) AS average_diameter
-   FROM botanic_garden_flora AS b
-  WHERE b.species_name = 'Banksia'
-     OR b.species_name = 'Sheoak'
-     OR b.species_name = 'Wattle'
-  GROUP BY b.species_name, b.observation_date);
-```
-
-Обратите внимание, что ключевые слова `SELECT`, `FROM` и т.д. выровнены по
-правому краю, при этом названия столбцов и различные условия — по левому.
-
-Помимо этого, старайтесь расставлять пробелы:
-
-* **до** и **после** знака равно (`=`)
+* **до** и **после** знаков операций (`=`, `==`, `>`, `>=` и т.д.)
 * **после** запятых (`,`)
 * **до** открывающего и **после** закрывающего апострофов (`'`), если последний
   не внутри скобок, или без последующих запятой или точки с запятой, или не в
@@ -221,9 +191,9 @@ SELECT model_num
 
 ```sql
 SELECT a.title, a.release_date, a.recording_date
-  FROM albums AS a
- WHERE a.title = 'Charcoal Lane'
-    OR a.title = 'The New Danger';
+    FROM albums AS a
+    WHERE a.title == 'Charcoal Lane'
+        OR a.title == 'The New Danger';
 ```
 
 #### Переводы строки
@@ -235,50 +205,47 @@ SELECT a.title, a.release_date, a.recording_date
 * **после** каждого основного ключевого слова
 * **после** запятой (при выделении логических групп столбцов)
 
-Следуя принципу, что ключевые слова выравниваются по правому краю, а всё
-остальное — по левому, мы добиваемся достаточно удобного расположения частей
-кода, вследствие чего улучшается зрительная навигация по нему.
 
 ```sql
 INSERT INTO albums (title, release_date, recording_date)
-VALUES ('Charcoal Lane', '1990-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000'),
-       ('The New Danger', '2008-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000');
+    VALUES ('Charcoal Lane', '1990-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000'),
+           ('The New Danger', '2008-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000');
 ```
 
 ```sql
 UPDATE albums
-   SET release_date = '1990-01-01 01:01:01.00000'
- WHERE title = 'The New Danger';
+    SET release_date = '1990-01-01 01:01:01.00000'
+    WHERE title == 'The New Danger';
 ```
 
 ```sql
 SELECT a.title,
-       a.release_date, a.recording_date, a.production_date -- grouped dates together
-  FROM albums AS a
- WHERE a.title = 'Charcoal Lane'
-    OR a.title = 'The New Danger';
+    a.release_date, a.recording_date, a.production_date -- grouped dates together
+    FROM albums AS a
+    WHERE a.title == 'Charcoal Lane'
+        OR a.title == 'The New Danger';
 ```
 
 ### Отступы
 
 Для того, чтобы SQL был удобочитаем, важно также следовать стандартам
-расстановки отступов.
+расстановки отступов. Как правило отступы кратны 4 пробелам.
+Если редактор исходного кода поддерживает настраиваемую табуляцию, имеет
+смысл установить замену табуляции на 4 пробела.
 
 #### `JOIN`
 
-Объединения (`JOIN`) должны располагаться по правую часть «коридора». При
-необходимости между ними можно добавить пустую строку.
+Объединения (`JOIN`) должны располагаться с отступами. 
 
 ```sql
 SELECT r.last_name
-  FROM riders AS r
-       INNER JOIN bikes AS b
-       ON r.bike_vin_num = b.vin_num
-          AND b.engine_tally > 2
-
-       INNER JOIN crew AS c
-       ON r.crew_chief_last_name = c.last_name
-          AND c.chief = 'Y';
+    FROM riders AS r
+        JOIN bikes AS b
+            ON r.bike_vin_num == b.vin_num
+                AND b.engine_tally > 2
+        JOIN crew AS c
+            ON r.crew_chief_last_name == c.last_name
+                AND c.chief == 'Y';
 ```
 
 #### Подзапросы
@@ -290,16 +257,16 @@ SELECT r.last_name
 
 ```sql
 SELECT r.last_name,
-       (SELECT MAX(YEAR(championship_date))
-          FROM champions AS c
-         WHERE c.last_name = r.last_name
-           AND c.confirmed = 'Y') AS last_championship_year
-  FROM riders AS r
- WHERE r.last_name IN
-       (SELECT c.last_name
-          FROM champions AS c
-         WHERE YEAR(championship_date) > '2008'
-           AND c.confirmed = 'Y');
+    (SELECT MAX(YEAR(championship_date))
+        FROM champions AS c
+        WHERE c.last_name == r.last_name
+            AND c.confirmed == 'Y') AS last_championship_year
+    FROM riders AS r
+    WHERE r.last_name IN
+        (SELECT c.last_name
+            FROM champions AS c
+            WHERE YEAR(championship_date) > '2008'
+                AND c.confirmed == 'Y');
 ```
 
 ### Формальные тонкости
@@ -322,6 +289,13 @@ SELECT CASE postcode
    AND postcode IN ('EH1', 'BN1', 'NN1', 'KW1');
 ```
 
+### Оператор сравнения `==`
+
+Некоторые СУБД (SQLite в частности) поддерживают оператор сравнения `==` наряду с `=`.
+В этом случае рекомендуется использовать `==` в условиях сравнения, т.к. это улучшает 
+читаемость кода. В случае необходимости портирования на другую СУБД этот оператор может быть 
+легко заменен в текстах запросов на `=`.
+
 ## Синтаксис `CREATE`
 
 При разработке схемы данных важно создавать человекочитаемый код. Убедитесь в
@@ -336,8 +310,8 @@ SELECT CASE postcode
   может не оказаться в старых версиях этих же СУБД.
 * Для работы с плавающей точкой **используйте** только `REAL` или `FLOAT`, но
   где нет необходимости в подобных вычислениях, всегда **используйте**
-  `NUMERIC` и `DECIMAL`. Ошибки округления в операциях с плавающей точкой
-  могут оказаться очень некстати.
+  `NUMERIC` и `DECIMAL` (неактуально для SQLite). Ошибки округления в операциях с плавающей 
+  точкой могут оказаться очень некстати.
 
 ### Значения по умолчанию
 
@@ -365,6 +339,7 @@ SELECT CASE postcode
 1. Можно ли проверить значение на соответствие стандарту (например, ISO)?
 1. Ключ должен быть как можно проще, чтобы можно было без трудностей
   использовать составные ключи.
+1. При необходимости используйте суррогатные ключи.
 
 Это своего рода конвенции, которые нужно сформулировать при проектировании
 базы данных. Если требования впоследствии будут разрастаться, можно и нужно
@@ -384,16 +359,13 @@ SELECT CASE postcode
   поэтому нужно позаботиться об остальных ограничениях.
 
 ##### Расположение и порядок
-(TODO)
-* Первичный ключ должен быть **объявлен** в самом начале, сразу после
-  оператора `CREATE TABLE`.
-* Ограничения должны быть **объявлены** строго ниже столбца, с которым они
-  связаны. Расставьте отступы так, чтобы объявление ограничения начиналось
-  после названия столбца.
-* В случае ограничений, затрагивающих несколько столбцов, старайтесь
-  **объявлять** их как можно ближе к описанию последнего из них. В крайнем
-  случае объявляйте ограничение в конце тела `CREATE TABLE`.
-* Ограничения целостности уровня таблицы должны **располагаться** в конце.
+* Первичный ключ, и другие ограничения могут быть **объявлен** как на уровне столбца, 
+  так и на уровне таблицы.
+  
+* В случае объявления ключей и ограничений на уровне таблицы, они должны распологаться
+  после объявления столбцов, в конце тела `CREATE TABLE`.
+* Ограничения целостности уровня таблицы должны **располагаться** в самом конце 
+  тела `CREATE TABLE`.
 * **Используйте** алфавитный порядок там, где `ON DELETE` предшествует
   `ON UPDATE`.
 * Внутри запроса можно **выравнивать** каждый уровень по-своему. Например,
@@ -404,7 +376,7 @@ SELECT CASE postcode
 
 ##### Валидация
 
-* **Используйте** `LIKE` и `SIMILAR TO` для обеспечения целостности строк с
+* **Используйте** `LIKE` для обеспечения целостности строк с
   известным форматом.
 * Если диапазон числовых значений для столбца известен, **используйте**
   `CHECK()` для предотвращения внесения в базу некорректных данных или
@@ -417,12 +389,12 @@ SELECT CASE postcode
 
 ```sql
 CREATE TABLE staff (
+    staff_num      INTEGER NOT NULL,
+    first_name     TEXT NOT NULL,
+    pens_in_drawer INTEGER NOT NULL,
     PRIMARY KEY (staff_num),
-    staff_num      INT(5)       NOT NULL,
-    first_name     VARCHAR(100) NOT NULL,
-    pens_in_drawer INT(2)       NOT NULL,
-                   CONSTRAINT pens_in_drawer_range
-                   CHECK(pens_in_drawer BETWEEN 1 AND 99)
+    CONSTRAINT pens_in_drawer_range
+        CHECK(pens_in_drawer BETWEEN 1 AND 99)
 );
 ```
 

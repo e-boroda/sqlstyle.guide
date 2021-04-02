@@ -250,7 +250,7 @@ SELECT r.last_name
 
 #### Подзапросы
 
-Подзапросы тоже должны быть выровнены по правому краю «коридора», а внутри них
+Подзапросы должны быть выровнены по аналогичным правилам, а внутри них
 самих применяются те же правила форматирования, что и в любом другом запросе.
 Если используются вложенные подзапросы, может иметь смысл поставить
 закрывающую скобку на новой строке ровно под парной ей открывающей скобкой.
@@ -280,13 +280,13 @@ SELECT r.last_name,
 
 ```sql
 SELECT CASE postcode
-       WHEN 'BN1' THEN 'Brighton'
-       WHEN 'EH1' THEN 'Edinburgh'
-       END AS city
-  FROM office_locations
- WHERE country = 'United Kingdom'
-   AND opening_time BETWEEN 8 AND 9
-   AND postcode IN ('EH1', 'BN1', 'NN1', 'KW1');
+        WHEN 'BN1' THEN 'Brighton'
+        WHEN 'EH1' THEN 'Edinburgh'
+        END AS city
+    FROM office_locations
+    WHERE country = 'United Kingdom'
+        AND opening_time BETWEEN 8 AND 9
+        AND postcode IN ('EH1', 'BN1', 'NN1', 'KW1');
 ```
 
 ### Оператор сравнения `==`
@@ -416,8 +416,6 @@ CREATE TABLE staff (
   таблице.
 
 ## Приложение
-
-<span id="reserved-keyword-reference" />
 
 ### Список зарезервированных ключевых слов
 
